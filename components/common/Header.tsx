@@ -1,9 +1,10 @@
 "use client";
 
-import { Code, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import React, { useState } from "react";
 import ThemeToggle from "@/components/theme-toggle";
 import Link from "next/link";
+import { Icon } from "../ui/icon";
 
 type headerInfo = {
   title: string;
@@ -16,8 +17,13 @@ type headerInfo = {
 // }
 
 const exampleHeaderInfo: headerInfo = {
-  title: "K-Mahlangu",
-  logo: <Code className="h-8 w-8 text-primary" />,
+  title: "K - Mahlangu",
+  logo: (
+    <Icon
+      url={"https://kellymahlangu.sirv.com/portfolio/Icon.svg"}
+      className="h-8 w-8 text-primary"
+    />
+  ),
 };
 
 export function Header() {
@@ -35,7 +41,7 @@ export function Header() {
             <Link href="/" className="flex items-center">
               {exampleHeaderInfo.logo}
               <span className="ml-2 text-xl font-bold text-foreground">
-                {exampleHeaderInfo.title}
+                {`< ${exampleHeaderInfo.title} />`}
               </span>
             </Link>
           </div>

@@ -10,7 +10,7 @@ export async function fetchBasic() {
       },
     });
     if (!basicRecord) {
-      console.error("No Basic Data found");
+      // console.error("No Basic Data found");
     }
 
     return basicRecord;

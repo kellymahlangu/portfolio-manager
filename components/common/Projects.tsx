@@ -30,8 +30,7 @@ const projects: Project[] = [
     id: 2,
     title: "Task Management App",
     summary: "A responsive task manager with drag-and-drop functionality.",
-    image:
-      "https://images.unsplash.com/photo-1522252234503-e356532cafd5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2560&q=80",
+    image: "/",
     techStack: ["react", "typescript", "tailwind"],
     demoLink: "https://demo.example.com",
     codeLink: "https://github.com/example/project",
@@ -55,9 +54,14 @@ export function Projects() {
       <h2 className="text-3xl font-bold mb-6">Projects</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((project, index) => (
-          <div className="border rounded-lg overflow-hidden shadow-md" key={index}>
+          <div
+            className="border rounded-lg overflow-hidden shadow-md"
+            key={index}
+          >
             <Image
-              src={project.image}
+              src="/noimg.jpg"
+              width={30}
+              height={45}
               alt={project.title}
               className="w-full h-48 object-cover"
             />

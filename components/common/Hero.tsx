@@ -7,7 +7,7 @@ type commonInfo = {
   lastName: string;
   occupation: string;
   slogan: string;
-  img: string;
+  img: string | null;
 };
 
 const testCommonInfo: commonInfo = {
@@ -16,7 +16,7 @@ const testCommonInfo: commonInfo = {
   lastName: "mahlangu",
   occupation: "Full Stack Developer",
   slogan: "Better tech for all!!",
-  img: "https://images.unsplash.com/photo-1522252234503-e356532cafd5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2560&q=80",
+  img: null,
 };
 
 export default function HeroSection() {
@@ -24,11 +24,15 @@ export default function HeroSection() {
     <section className="relative flex-grow flex items-center">
       {/* Background image for small screens */}
       <div className="absolute inset-0 lg:hidden">
-        <Image
-          src={testCommonInfo.img}
-          alt="Background"
-          className="w-full h-full object-cover"
-        />
+        {testCommonInfo.img && (
+          <Image
+            src={testCommonInfo.img}
+            layout="intrinsic"
+            alt="Background"
+            className="w-full h-full object-cover"
+          />
+        )}
+
         <div className="absolute inset-0 bg-opacity-50" />
       </div>
 
@@ -68,11 +72,14 @@ export default function HeroSection() {
 
           {/* Image for large screens */}
           <div className="hidden lg:block lg:w-1/2 xl:w-3/5 mt-10 lg:mt-0 lg:ml-8 xl:ml-16">
-            <Image
-              src={testCommonInfo.img}
-              alt="Decorative illustration"
-              className="rounded-lg shadow-xl w-full h-auto"
-            />
+            {testCommonInfo.img && (
+              <Image
+                src={testCommonInfo.img}
+                layout="intrinsic"
+                alt="Decorative illustration"
+                className="rounded-lg shadow-xl w-full h-auto"
+              />
+            )}
           </div>
         </div>
       </div>
