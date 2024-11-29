@@ -1,3 +1,5 @@
+"use server";
+
 import {
   FaReact,
   FaNodeJs,
@@ -89,7 +91,7 @@ const exampleSkills: category[] = [
   },
 ];
 
-export function Skills() {
+export default async function Skills() {
   return (
     <section className="py-12">
       <div className="container mx-auto px-4">

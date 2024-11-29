@@ -2,15 +2,15 @@
 
 import { disconnectPrisma, prisma } from "@/lib/prisma";
 
-export async function fetchBasic() {
+export async function fetchAbout() {
   try {
-    const record = await prisma.basic.findUnique({
+    const record = await prisma.about.findUnique({
       where: {
         id: "USER",
       },
     });
     if (!record) {
-      console.error("No Basic Data found");
+      console.error("No About Data found");
     }
 
     return record;

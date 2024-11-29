@@ -4,11 +4,10 @@ import { Menu, X } from "lucide-react";
 import React, { useState } from "react";
 import ThemeToggle from "@/components/theme-toggle";
 import Link from "next/link";
-import { Icon } from "../ui/icon";
+import { TbUserCode } from "react-icons/tb";
 
 type headerInfo = {
   title: string;
-  logo: React.JSX.Element | null;
 };
 
 // interface HeaderProps {
@@ -16,17 +15,7 @@ type headerInfo = {
 //   logo: React.JSX.Element | null;
 // }
 
-const exampleHeaderInfo: headerInfo = {
-  title: "K - Mahlangu",
-  logo: (
-    <Icon
-      url={"https://kellymahlangu.sirv.com/portfolio/Icon.svg"}
-      className="h-8 w-8 text-primary"
-    />
-  ),
-};
-
-export function Header() {
+export function Header({ title }: headerInfo) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -39,9 +28,9 @@ export function Header() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
-              {exampleHeaderInfo.logo}
+              <TbUserCode className="h-8 w-8 text-primary" />
               <span className="ml-2 text-xl font-bold text-foreground">
-                {`< ${exampleHeaderInfo.title} />`}
+                {title}
               </span>
             </Link>
           </div>
