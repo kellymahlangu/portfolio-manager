@@ -2,6 +2,7 @@
 
 import { disconnectPrisma, prisma } from "@/lib/prisma";
 
+
 export async function fetchAbout() {
   try {
     const record = await prisma.about.findUnique({
