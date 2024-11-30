@@ -8,7 +8,7 @@ type HeroSectionProps = {
   lastName: string;
   occupation: string;
   slogan: string;
-  img: string | null;
+  img: string;
 };
 
 export default async function HeroSection({
@@ -23,7 +23,7 @@ export default async function HeroSection({
       {/* Background image for small screens */}
       <div className="absolute inset-0 lg:hidden">
         <Image
-          src="/main.svg"
+          src={img}
           alt="Background"
           layout="fill"
           objectFit="cover"
@@ -36,13 +36,16 @@ export default async function HeroSection({
         <div className="lg:flex lg:items-center lg:justify-between">
           <div className="relative z-10 lg:w-1/2 xl:w-2/5">
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-              <span className="block">Hi, I'm</span>
-              <span className="block mt-1">Your Name</span>
+              <span className="block">Hi, {"I'm"}</span>
+              <span className="block mt-1">
+                {firstName.charAt(0).toUpperCase() + firstName.slice(1)}{" "}
+                {lastName.charAt(0).toUpperCase() + lastName.slice(1)}
+              </span>
             </h1>
             <p className="mt-3 text-base sm:mt-5 sm:text-xl">
-              A Frontend Developer
+              A {occupation}
             </p>
-            <p className="mt-2 text-base sm:text-lg">Bringing ideas to life</p>
+            <p className="mt-2 text-base sm:text-lg">{slogan}</p>
             <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-4">
               <Link href="#contact">
                 <Button variant="default">Contac Me</Button>
@@ -56,7 +59,7 @@ export default async function HeroSection({
           {/* Image for large screens */}
           <div className="hidden lg:block lg:w-1/2 xl:w-3/5 mt-10 lg:mt-0 lg:ml-8 xl:ml-16">
             <Image
-              src="/main.svg"
+              src={img}
               alt="Decorative illustration"
               width={600}
               height={400}

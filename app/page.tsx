@@ -10,11 +10,14 @@ import { Testimonials } from "@/components/common/Testimonials";
 import { fetchBasic } from "./_actions/basic";
 import InDevPop from "@/components/InDev";
 import { fetchAbout } from "./_actions/about";
+import { fetchSkill } from "./_actions/skill";
 
 export default async function Home() {
   const basicRecord = await fetchBasic();
   const aboutRecord = await fetchAbout();
-  if (!basicRecord || !aboutRecord) {
+  const skillRecord = await fetchSkill();
+
+  if (!basicRecord || !aboutRecord || !skillRecord) {
     return (
       <div className="min-h-screen flex flex-col">
         <InDevPop />
@@ -22,27 +25,31 @@ export default async function Home() {
     );
   }
 
+  const experienceRecord = [];
+  const testimonialsRecord = [];
+
   const components = [
     <HeroSection
+      key={0}
       firstName={basicRecord.name}
       lastName={basicRecord.surname}
       occupation={basicRecord.occupation}
       slogan={basicRecord.tagline}
-      img={null}
+      img={basicRecord.mainImg}
     />,
     <AboutMe
+      key={1}
       img={aboutRecord.img}
       p1={aboutRecord.p1}
       p2={aboutRecord.p2}
       p3={aboutRecord.p3}
       cv={aboutRecord.cv}
     />,
-    <Skills />,
-    <Projects />,
-    <Experiance />,
-    <Testimonials />,
-    <Contact />,
-    <Footer />,
+    <Skills skillList={skillRecord} key={2} />,
+    <Projects key={3} />,
+    ...(experienceRecord.length > 0 ? [<Experiance key={4} />] : []),
+    ...(testimonialsRecord.length > 0 ? [<Testimonials key={5} />] : []),
+    <Contact key={6} />,
   ];
 
   return (
@@ -57,6 +64,7 @@ export default async function Home() {
             {component}
           </section>
         ))}
+        <Footer />,
       </div>
     </div>
   );

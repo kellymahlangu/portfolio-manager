@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 interface AboutMeProps {
-  img: string | null;
+  img: string;
   p1: string;
   p2: string;
   p3: string;
@@ -17,8 +17,8 @@ export default async function AboutMe({ img, p1, p2, p3, cv }: AboutMeProps) {
       <div className="flex flex-col md:flex-row md:space-x-8 space-y-6 md:space-y-0">
         <div className="md:w-1/3 flex md:justify-start order-first">
           <Image
-            src="/noimg.jpg"
-            alt="/noimg.jpg"
+            src={img}
+            alt="headshot Omage"
             width={300}
             height={250}
             className="rounded-full"
@@ -29,7 +29,7 @@ export default async function AboutMe({ img, p1, p2, p3, cv }: AboutMeProps) {
           <p>{p2}</p>
           <p>{p3}</p>
           <Button asChild className="mt-4">
-            <Link href={"cv"}>View Full Resume</Link>
+            <Link href={cv}>View Full Resume</Link>
           </Button>
         </div>
       </div>

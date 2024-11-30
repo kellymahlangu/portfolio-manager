@@ -3,8 +3,7 @@ import { PrismaClient } from "@prisma/client";
 let prisma: PrismaClient;
 
 declare global {
-  // Prevents multiple Prisma Client instances in development
-  // when using hot-reloading.
+  // eslint-disable-next-line no-var
   var __prisma: PrismaClient | undefined;
 }
 
@@ -25,7 +24,7 @@ prisma.$use(async (params, next) => {
     const result = await next(params);
     return result;
   } catch (error) {
-    console.error(`[Prisma Error]: ${error.message}`);
+    // console.error(`[Prisma Error]: ${error.message}`);
     throw error; // Re-throw the error so the calling code is aware
   }
 });

@@ -17,16 +17,20 @@ enum BasicId {
   USER
 }
 
+enum SkillCategory {
+  FRONTEND
+  BACKEND
+  TOOL
+}
+
 model Basic {
   id         BasicId @id @default(USER)
-  logo       String
   title      String
   name       String
   surname    String
   occupation String
   tagline    String
   mainImg    String
-  headshot   String
 }
 
 model About {
@@ -36,4 +40,12 @@ model About {
   p2  String
   p3  String
   cv  String
+}
+
+model Skill {
+  id       Int           @id @default(autoincrement())
+  name     String
+  icon     String
+  level    Int
+  category SkillCategory
 }
