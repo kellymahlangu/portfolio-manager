@@ -34,4 +34,4 @@ async function disconnectPrisma() {
   await prisma.$disconnect();
 }
 
-export { prisma, disconnectPrisma };
+export default { prisma, disconnectPrisma };
