@@ -18,7 +18,7 @@ export default async function AboutMe({ img, p1, p2, p3, cv }: AboutMeProps) {
         <div className="md:w-1/3 flex md:justify-start order-first">
           <Image
             src={img}
-            alt="headshot Omage"
+            alt="headshot Image"
             width={300}
             height={250}
             className="rounded-full"

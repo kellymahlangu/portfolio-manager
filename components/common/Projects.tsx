@@ -6,21 +6,21 @@ import { Button } from "../ui/button";
 
 type project = {
   stack: {
-    id: number;
     name: string;
     icon: string;
+    id: number;
     level: number;
     category: $Enums.SkillCategory;
   }[];
 } & {
+  name: string;
   id: string;
   img: string;
-  name: string;
   description: string;
   liveUrl: string;
   repoUrl: string | null;
+  isOpenSource: boolean;
 };
-
 interface ProjectsProps {
   projects: project[];
 }
@@ -55,8 +55,8 @@ export function Projects({ projects }: ProjectsProps) {
                 <a href={project.liveUrl}>
                   <Button variant="default">Live Demo</Button>
                 </a>
-                {project.repoUrl && (
-                  <a href={project.repoUrl}>
+                {project.isOpenSource && (
+                  <a href={`${project.repoUrl}`}>
                     <Button variant="secondary">View Code</Button>
                   </a>
                 )}

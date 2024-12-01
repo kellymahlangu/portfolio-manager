@@ -50,14 +50,37 @@ model Skill {
   category SkillCategory
 
   Project Project[]
+
+  Experience Experience[]
 }
 
 model Project {
-  id          String  @id @default(uuid())
-  img         String
-  name        String
-  description String
-  stack       Skill[]
-  liveUrl     String
-  repoUrl     String?
+  id           String  @id @default(uuid())
+  img          String
+  name         String
+  description  String
+  stack        Skill[]
+  liveUrl      String
+  repoUrl      String?
+  isOpenSource Boolean @default(true)
+}
+
+model Experience {
+  id           Int       @id @default(autoincrement())
+  company      String
+  role         String
+  start        DateTime
+  end          DateTime?
+  summary      String
+  achievements String[]
+  skills       Skill[]
+}
+
+model Contact {
+  id        String  @id @default(uuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  responded Boolean @default(false)
 }
