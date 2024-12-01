@@ -11,13 +11,15 @@ import { fetchBasic } from "./_actions/basic";
 import InDevPop from "@/components/InDev";
 import { fetchAbout } from "./_actions/about";
 import { fetchSkill } from "./_actions/skill";
+import { fetchProject } from "./_actions/project";
 
 export default async function Home() {
   const basicRecord = await fetchBasic();
   const aboutRecord = await fetchAbout();
   const skillRecord = await fetchSkill();
+  const projectRecord = await fetchProject();
 
-  if (!basicRecord || !aboutRecord || !skillRecord) {
+  if (!basicRecord || !aboutRecord || !skillRecord || !projectRecord) {
     return (
       <div className="min-h-screen flex flex-col">
         <InDevPop />
@@ -46,7 +48,7 @@ export default async function Home() {
       cv={aboutRecord.cv}
     />,
     <Skills skillList={skillRecord} key={2} />,
-    <Projects key={3} />,
+    <Projects key={3} projects={projectRecord} />,
     ...(experienceRecord.length > 0 ? [<Experiance key={4} />] : []),
     ...(testimonialsRecord.length > 0 ? [<Testimonials key={5} />] : []),
     <Contact key={6} />,

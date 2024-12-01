@@ -48,4 +48,16 @@ model Skill {
   icon     String
   level    Int
   category SkillCategory
+
+  Project Project[]
+}
+
+model Project {
+  id          String  @id @default(uuid())
+  img         String
+  name        String
+  description String
+  stack       Skill[]
+  liveUrl     String
+  repoUrl     String?
 }
