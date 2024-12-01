@@ -1,13 +1,13 @@
 "use client";
 
-import { Code, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import React, { useState } from "react";
 import ThemeToggle from "@/components/theme-toggle";
 import Link from "next/link";
+import { TbUserCode } from "react-icons/tb";
 
 type headerInfo = {
   title: string;
-  logo: React.JSX.Element | null;
 };
 
 // interface HeaderProps {
@@ -15,12 +15,7 @@ type headerInfo = {
 //   logo: React.JSX.Element | null;
 // }
 
-const exampleHeaderInfo: headerInfo = {
-  title: "K-Mahlangu",
-  logo: <Code className="h-8 w-8 text-primary" />,
-};
-
-export function Header() {
+export function Header({ title }: headerInfo) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -28,14 +23,14 @@ export function Header() {
   };
 
   return (
-    <header className="bg-background shadow-sm">
+    <header className="z-50 shadow-sm fixed w-full backdrop-blur-md bg-background/50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
-              {exampleHeaderInfo.logo}
+              <TbUserCode className="h-8 w-8 text-primary" />
               <span className="ml-2 text-xl font-bold text-foreground">
-                {exampleHeaderInfo.title}
+                {title}
               </span>
             </Link>
           </div>
@@ -44,7 +39,7 @@ export function Header() {
               <ul className="flex space-x-4">
                 <li>
                   <Link
-                    href="/about"
+                    href="#about"
                     className="text-muted-foreground hover:text-foreground"
                   >
                     About
@@ -52,15 +47,7 @@ export function Header() {
                 </li>
                 <li>
                   <Link
-                    href="/projects"
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    Projects
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/skills"
+                    href="#skills"
                     className="text-muted-foreground hover:text-foreground"
                   >
                     Skills
@@ -68,7 +55,23 @@ export function Header() {
                 </li>
                 <li>
                   <Link
-                    href="/contact"
+                    href="#projects"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Projects
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#exp"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Experiance
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#contact"
                     className="text-muted-foreground hover:text-foreground"
                   >
                     Contact
@@ -97,25 +100,25 @@ export function Header() {
         <div className="md:hidden">
           <nav className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <Link
-              href="/about"
+              href="#about"
               className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent"
             >
               About
             </Link>
             <Link
-              href="/projects"
+              href="#projects"
               className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent"
             >
               Projects
             </Link>
             <Link
-              href="/skills"
+              href="#skills"
               className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent"
             >
               Skills
             </Link>
             <Link
-              href="/contact"
+              href="#contact"
               className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-foreground hover:bg-accent"
             >
               Contact
