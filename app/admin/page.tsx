@@ -1,27 +1,69 @@
-import ProjectsAndSkills from "@/app/admin/components/ProjectsAndSkills";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Suspense } from "react";
+"use client";
+import {
+  SidebarTrigger,
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import AboutMeCard from "./components/AboutInfoForm";
+import ProjectsAndSkillsCard from "./components/ProjectsAndSkills";
+import { CircleUser, PencilRuler } from "lucide-react";
+import { useState } from "react";
+
+const items = [
+  {
+    title: "Basic Information",
+    url: "#basic",
+    content: <AboutMeCard />,
+    icon: CircleUser,
+  },
+  {
+    title: "Skills and Projects",
+    url: "#skillsandprojects",
+    content: <ProjectsAndSkillsCard />,
+    icon: PencilRuler,
+  },
+];
 
 function AdminPage() {
+  const [activeItem, setActiveItem] = useState(items[0]);
   return (
-    <div className="container mx-auto p-4 w-9/12">
-      <h1 className="text-3xl font-bold mb-6">Skills And Projects</h1>
-      <div>
-        <Card className="">
-          <CardHeader>
-            <CardTitle className="flex justify-between items-center">
-              {/* <h2 className="text-xl font-semibold">Basic Information</h2>
-              <GenerateAboutDialog /> */}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Suspense fallback={<div>Loading...</div>}>
-              <ProjectsAndSkills />
-            </Suspense>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+    <>
+      <Sidebar>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Application</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={activeItem.title === item.title}
+                      onClick={() => setActiveItem(item)}
+                    >
+                      <a href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+      <main className="w-screen">
+        <SidebarTrigger />
+        <div className="container mx-auto p-4 w-9/12">{activeItem.content}</div>
+      </main>
+    </>
   );
 }
 

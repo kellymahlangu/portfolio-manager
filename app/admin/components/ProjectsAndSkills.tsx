@@ -35,8 +35,10 @@ import {
   deleteSkill,
 } from "../actions";
 import { MultiSelect } from "@/components/ui/multi-select";
+import { Card, CardContent } from "@/components/ui/card";
+import { Suspense } from "react";
 
-export default function ProjectsAndSkills() {
+function ProjectsAndSkills() {
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [skills, setSkills] = useState<SkillForm[]>([]);
@@ -448,5 +450,22 @@ export default function ProjectsAndSkills() {
         </div>
       </TabsContent>
     </Tabs>
+  );
+}
+
+export default function ProjectsAndSkillsCard() {
+  return (
+    <>
+      <h1 className="text-3xl font-bold mb-6">Skills And Projects</h1>
+      <div>
+        <Card className="">
+          <CardContent>
+            <Suspense fallback={<div>Loading...</div>}>
+              <ProjectsAndSkills />
+            </Suspense>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 }

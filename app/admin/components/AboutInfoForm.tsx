@@ -19,9 +19,12 @@ import {
   updateAboutMe,
   getAboutQuestions,
 } from "../actions";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Suspense } from "react";
 import { AboutQuestions, Basic } from "@prisma/client";
+import GenerateAboutDialog from "@/components/common/GenerateAboutDialog";
 
-export default function AboutMeForm() {
+function AboutMeForm() {
   const router = useRouter();
   const [basic, setBasic] = useState<Basic>({
     id: "USER",
@@ -229,5 +232,23 @@ export default function AboutMeForm() {
 
       <Button type="submit">Save Changes</Button>
     </form>
+  );
+}
+
+export default function AboutMeCard() {
+  return (
+    <Card className="">
+      <CardHeader>
+        <CardTitle className="flex justify-between items-center">
+          <h2 className="text-xl font-semibold">Basic Information</h2>
+          <GenerateAboutDialog />
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Suspense fallback={<div>Loading...</div>}>
+          <AboutMeForm />
+        </Suspense>
+      </CardContent>
+    </Card>
   );
 }
