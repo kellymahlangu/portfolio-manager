@@ -43,7 +43,7 @@ export default async function Home() {
           lastName={basicRecord.surname}
           occupation={basicRecord.occupation}
           slogan={basicRecord.tagline}
-          img={basicRecord.mainImg}
+          img={basicRecord.summeryVid}
         />
       ),
     },
@@ -80,20 +80,25 @@ export default async function Home() {
   ];
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-4">
-      <div className="max-w-full w-full">
-        <Header title={basicRecord.title} />
-        {components.map((comp, index) => (
-          <section
-            className={`h-screen w-full flex flex-col items-center justify-center`}
-            key={index}
-            id={comp.id}
-          >
-            {comp.component}
-          </section>
-        ))}
-        <Footer />,
+    <main className="w-screen">
+      <div className="min-h-screen w-full flex flex-col items-center justify-center p-4">
+        <div className="max-w-full w-full">
+          <Header
+            title={basicRecord.title}
+            hasExp={experienceRecord.length > 0}
+          />
+          {components.map((comp, index) => (
+            <section
+              className={`h-screen w-full flex flex-col items-center justify-center`}
+              key={index}
+              id={comp.id}
+            >
+              {comp.component}
+            </section>
+          ))}
+          <Footer />,
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

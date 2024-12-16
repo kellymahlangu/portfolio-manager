@@ -22,6 +22,7 @@ export async function submitContact({
         email: email.toLowerCase(),
         subject,
         message,
+        isSubscribed: false,
       },
     });
 
