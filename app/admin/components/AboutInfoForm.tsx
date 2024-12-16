@@ -18,7 +18,7 @@ import {
   getAboutInfo,
   updateAboutMe,
   getAboutQuestions,
-} from "../actions";
+} from "@/app/actions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Suspense } from "react";
 import { AboutQuestions, Basic } from "@prisma/client";

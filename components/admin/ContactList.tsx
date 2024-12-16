@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Contact } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { deleteContact, getContacts, updateContact } from "@/app/admin/actions";
+import { deleteContact, getContacts, updateContact } from "@/app/actions";
 
 export default function ContactList() {
   const router = useRouter();

@@ -33,7 +33,7 @@ import {
   createSkill,
   updateSkill,
   deleteSkill,
-} from "../actions";
+} from "@/app/actions";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Card, CardContent } from "@/components/ui/card";
 import { Suspense } from "react";

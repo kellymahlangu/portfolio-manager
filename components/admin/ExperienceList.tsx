@@ -13,7 +13,7 @@ import {
   updateExperience,
   deleteExperience,
   getSkills,
-} from "@/app/admin/actions";
+} from "@/app/actions";
 
 export default function ExperienceList() {
   const router = useRouter();

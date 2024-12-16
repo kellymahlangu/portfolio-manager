@@ -6,11 +6,13 @@ import { Header } from "@/components/common/Header";
 import HeroSection from "@/components/common/Hero";
 import { Projects } from "@/components/common/Projects";
 import Skills from "@/components/common/Skills";
-import { fetchBasic } from "./_actions/basic";
 import InDevPop from "@/components/InDev";
-import { fetchAbout } from "./_actions/about";
-import { fetchSkill } from "./_actions/skill";
-import { fetchProject } from "./_actions/project";
+import {
+  getAboutInfo,
+  getBasicInfo,
+  getProjects,
+  getSkills,
+} from "@/app/actions";
 import { fetchExperience } from "./_actions/expreience";
 
 type componentType = {
@@ -18,10 +20,10 @@ type componentType = {
   component: JSX.Element;
 };
 export default async function Home() {
-  const basicRecord = await fetchBasic();
-  const aboutRecord = await fetchAbout();
-  const skillRecord = await fetchSkill();
-  const projectRecord = await fetchProject();
+  const basicRecord = await getBasicInfo();
+  const aboutRecord = await getAboutInfo();
+  const skillRecord = await getSkills();
+  const projectRecord = await getProjects();
 
   if (!basicRecord || !aboutRecord || !skillRecord || !projectRecord) {
     return (

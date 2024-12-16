@@ -11,7 +11,7 @@ import {
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
-import { generateAboutMeParagraph } from "@/app/admin/actions";
+import { generateAboutMeParagraph } from "@/app/actions";
 
 function GenerateAboutDialog() {
   const [isLoading, setIsLoading] = useState<boolean>(false);

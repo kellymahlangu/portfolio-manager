@@ -7,7 +7,7 @@ import {
   AboutQuestions,
   Basic,
 } from "@prisma/client";
-import { Project, PartialProject, SkillForm } from "../types";
+import { Project, PartialProject, SkillForm } from "@/app/types";
 
 const prisma = new PrismaClient();
 
