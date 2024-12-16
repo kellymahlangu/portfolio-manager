@@ -158,26 +158,49 @@ export async function updateAboutMe({
   basic: Basic;
   files: { headshot: string; cv: string };
 }) {
-  await prisma.basic.update({
-    where: { id: BasicId.USER },
-    data: basic,
-  });
+  const basicDb = await getBasicInfo();
+  const aboutDB = await getAboutInfo();
 
-  await prisma.aboutQuestions.update({
-    where: { id: BasicId.USER },
-    data: about,
-  });
+  if (!basicDb) {
+    await prisma.basic.create({
+      data: basic,
+    });
+  }
+  if (!aboutDB) {
+    await prisma.about.create({
+      data: {
+        id: "USER",
+        p1: "Paragraph 1",
+        p2: "Paragraph 2",
+        p3: "Paragraph 3",
+        img: files.headshot,
+        cv: files.cv,
+      },
+    });
+  }
+  try {
+    updateBasicInfo(basic);
 
-  await prisma.about.update({
-    where: { id: BasicId.USER },
-    data: {
-      p1: "Paragraph 1",
-      p2: "Paragraph 2",
-      p3: "Paragraph 3",
-      img: files.headshot,
-      cv: files.cv,
-    },
-  });
+    await prisma.aboutQuestions.update({
+      where: { id: BasicId.USER },
+      data: about,
+    });
+
+    await prisma.about.update({
+      where: { id: BasicId.USER },
+      data: {
+        p1: "Paragraph 1",
+        p2: "Paragraph 2",
+        p3: "Paragraph 3",
+        img: files.headshot,
+        cv: files.cv,
+      },
+    });
+  } catch (error) {
+    return { succes: false, data: null, error };
+  }
+
+  return { succes: true, data: "" };
 }
 
 export async function generateAboutMeParagraph() {

@@ -26,6 +26,7 @@ import GenerateAboutDialog from "@/components/common/GenerateAboutDialog";
 
 function AboutMeForm() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [basic, setBasic] = useState<Basic>({
     id: "USER",
     name: "",
@@ -67,7 +68,9 @@ function AboutMeForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     await updateAboutMe({ about, basic, files });
+    setIsLoading(false);
     router.refresh();
   };
 
@@ -230,7 +233,9 @@ function AboutMeForm() {
         </div>
       </div>
 
-      <Button type="submit">Save Changes</Button>
+      <Button type="submit" disabled={isLoading}>
+        Save Changes
+      </Button>
     </form>
   );
 }
