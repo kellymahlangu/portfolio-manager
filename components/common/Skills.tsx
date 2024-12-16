@@ -29,7 +29,7 @@ export default async function Skills({ skillList }: SkillsProps) {
                 <li key={skill.id} className="space-y-2">
                   <div className="flex justify-between">
                     <span className="flex items-center space-x-2  rounded-full px-3 py-1">
-                      <CustomIcon src={skill.icon} className="mr-1.5" />
+                      <i className="devicon-javascript-plain"></i>
                       {skill.name.charAt(0).toUpperCase() + skill.name.slice(1)}
                     </span>
                     <span>{skill.level}%</span>

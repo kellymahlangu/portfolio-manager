@@ -4,10 +4,12 @@ import { Menu, X } from "lucide-react";
 import React, { useState } from "react";
 import ThemeToggle from "@/components/theme-toggle";
 import Link from "next/link";
-import { TbUserCode } from "react-icons/tb";
+// import { ReactComponent as FullLogo} from './../../public/logo-full.svg';
+import { useTheme } from "next-themes";
 
 type headerInfo = {
   title: string;
+  hasExp: boolean;
 };
 
 // interface HeaderProps {
@@ -15,8 +17,9 @@ type headerInfo = {
 //   logo: React.JSX.Element | null;
 // }
 
-export function Header({ title }: headerInfo) {
+export function Header({ hasExp }: headerInfo) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { theme } = useTheme();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -27,11 +30,11 @@ export function Header({ title }: headerInfo) {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center">
-              <TbUserCode className="h-8 w-8 text-primary" />
-              <span className="ml-2 text-xl font-bold text-foreground">
-                {title}
-              </span>
+            <Link href="#home" className="flex items-center">
+              <img
+                src={`/logo-full_${theme === undefined ? "dark" : theme}.svg`}
+                className="h-64 w-64"
+              />
             </Link>
           </div>
           <div className="hidden md:flex items-center space-x-4">
@@ -61,14 +64,17 @@ export function Header({ title }: headerInfo) {
                     Projects
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href="#exp"
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    Experiance
-                  </Link>
-                </li>
+                {hasExp && (
+                  <li>
+                    <Link
+                      href="#exp"
+                      className="text-muted-foreground hover:text-foreground"
+                    >
+                      Experiance
+                    </Link>
+                  </li>
+                )}
+
                 <li>
                   <Link
                     href="#contact"

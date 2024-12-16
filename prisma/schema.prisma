@@ -23,6 +23,7 @@ enum SkillCategory {
   TOOL
 }
 
+// Basic infomation for portfolio user
 model Basic {
   id         BasicId @id @default(USER)
   title      String
@@ -30,9 +31,20 @@ model Basic {
   surname    String
   occupation String
   tagline    String
-  mainImg    String
+  summeryVid String  @default("Nothing here")
 }
 
+model AboutQuestions {
+  id                BasicId @id @default(USER)
+  specialization    String
+  excitement        String
+  yearsOfExperience Int
+  problemsSolved    String
+  motivation        String
+  interests         String
+}
+
+// About infomation for portfolio user
 model About {
   id  BasicId @id @default(USER)
   img String
@@ -42,6 +54,7 @@ model About {
   cv  String
 }
 
+// Languages and Tools know and used by owner
 model Skill {
   id       Int           @id @default(autoincrement())
   name     String
@@ -54,6 +67,7 @@ model Skill {
   Experience Experience[]
 }
 
+// Projects done by owner
 model Project {
   id           String  @id @default(uuid())
   img          String
@@ -65,6 +79,7 @@ model Project {
   isOpenSource Boolean @default(true)
 }
 
+// Experience 
 model Experience {
   id           Int       @id @default(autoincrement())
   company      String
@@ -76,11 +91,43 @@ model Experience {
   skills       Skill[]
 }
 
+// contact information for people who filled the contact me Form
 model Contact {
-  id        String  @id @default(uuid())
-  name      String
-  email     String
-  subject   String?
-  message   String
-  responded Boolean @default(false)
+  id           String  @id @default(uuid())
+  name         String
+  email        String
+  subject      String?
+  message      String
+  responded    Boolean @default(false)
+  isSubscribed Boolean // whether the said person id subscribed to receive promotional and marketing messeges
+}
+
+// languages and skills 
+
+model Devicon {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  altnames   String[]
+  tags       String[]
+  color      String
+  versions   Versions @relation(fields: [versionsId], references: [id])
+  versionsId Int
+  aliases    Alias[]
+  isKnown    Boolean  @default(false)
+}
+
+model Versions {
+  id   Int      @id @default(autoincrement())
+  svg  String[]
+  font String[]
+
+  Devicon Devicon[]
+}
+
+model Alias {
+  id        Int     @id @default(autoincrement())
+  base      String
+  alias     String
+  devicon   Devicon @relation(fields: [deviconId], references: [id])
+  deviconId Int
 }
