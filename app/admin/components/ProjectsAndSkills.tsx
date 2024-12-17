@@ -33,10 +33,19 @@ import {
   createSkill,
   updateSkill,
   deleteSkill,
+  hasIconsLoaded,
 } from "@/app/actions";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Suspense } from "react";
+import { UploadCloud } from "lucide-react";
+import { error } from "console";
 
 function ProjectsAndSkills() {
   const router = useRouter();
@@ -56,10 +65,12 @@ function ProjectsAndSkills() {
   const [isNewProjectDialogOpen, setIsNewProjectDialogOpen] = useState(false);
   const [isEditProjectDialogOpen, setIsEditProjectDialogOpen] = useState(false);
   const [selectedStack, setSelectedStack] = useState<number[]>([]);
+  const [hasIcons, setHasIcons] = useState<boolean>();
 
   useEffect(() => {
     getProjects().then(setProjects);
     getSkills().then(setSkills);
+    hasIconsLoaded().then(setHasIcons);
   }, []);
 
   const handleCreateProject = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -342,6 +353,80 @@ function ProjectsAndSkills() {
     </form>
   );
 
+  const FileUploadForm = () => {
+    const [jsonContent, setJsonContent] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        if (file.type !== "application/json") {
+          setError("Please upload a JSON file");
+          setJsonContent(null);
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const content = e.target?.result as string;
+            JSON.parse(content); // Validate JSON
+            setJsonContent(content);
+            setError(null);
+          } catch (err) {
+            setError("Invalid JSON file");
+            setJsonContent(null);
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Upload JSON File</CardTitle>
+          <CardDescription>
+            Drag and drop your JSON file or click to browse
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-center w-full">
+            <Label
+              htmlFor="dropzone-file"
+              className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer"
+            >
+              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                <UploadCloud className="w-8 h-8 mb-4" />
+                <p className="mb-2 text-sm">
+                  <span className="font-semibold">Click to upload</span> or drag
+                  and drop
+                </p>
+                <p className="text-xs">JSON file only</p>
+              </div>
+              <Input
+                id="dropzone-file"
+                type="file"
+                className="hidden"
+                accept=".json"
+                onChange={handleFileUpload}
+              />
+            </Label>
+          </div>
+          {error && <div className="text-red-500 text-sm">{error}</div>}
+          {jsonContent && (
+            <div>
+              <h3 className="text-lg font-semibold mb-2">JSON Content:</h3>
+              <pre className="p-4 rounded-lg overflow-x-auto">
+                {jsonContent}
+              </pre>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <Tabs defaultValue="projects" className="w-full">
       <TabsList>
@@ -414,40 +499,7 @@ function ProjectsAndSkills() {
         </div>
       </TabsContent>
       <TabsContent value="skills">
-        <div className="space-y-6">
-          <h3 className="text-lg font-semibold">Skills</h3>
-          <ul className="space-y-2">
-            {skills.map((skill) => (
-              <li key={skill.id} className="flex items-center justify-between">
-                <span>
-                  {skill.name} - {skill.category} (Level: {skill.level})
-                </span>
-                <div>
-                  <Button onClick={() => setEditingSkill(skill)}>Edit</Button>
-                  <Button
-                    variant="destructive"
-                    onClick={() => handleDeleteSkill(skill.id!)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </li>
-            ))}
-          </ul>
-          {editingSkill ? (
-            <SkillForm
-              skill={editingSkill}
-              onSubmit={handleUpdateSkill}
-              buttonText="Update Skill"
-            />
-          ) : (
-            <SkillForm
-              skill={newSkill}
-              onSubmit={handleCreateSkill}
-              buttonText="Add Skill"
-            />
-          )}
-        </div>
+        {!hasIcons && <FileUploadForm />}
       </TabsContent>
     </Tabs>
   );

@@ -231,3 +231,57 @@ export async function generateAboutMeParagraph() {
     data: { p1: "Paragraph 1", p2: "Paragraph 2", p3: "Paragraph 3" },
   };
 }
+
+export async function hasIconsLoaded() {
+  const icons = await prisma.devicon.findMany();
+  return icons.length !== 0;
+}
+
+async function loadSkillAndToolData(fileContent: string) {
+  try {
+    const deviconData = JSON.parse(fileContent);
+
+    // Loop through each entry and insert into the database
+    for (const entry of deviconData) {
+      // Create the versions entry first
+      const versions = await prisma.versions.create({
+        data: {
+          svg: entry.versions.svg,
+          font: entry.versions.font,
+        },
+      });
+
+      // Create the devicon entry
+      const devicon = await prisma.devicon.create({
+        data: {
+          name: entry.name,
+          altnames: entry.altnames,
+          tags: entry.tags,
+          color: entry.color,
+          versionsId: versions.id,
+        },
+      });
+
+      // Create the aliases
+      if (entry.aliases && entry.aliases.length > 0) {
+        for (const alias of entry.aliases) {
+          await prisma.alias.create({
+            data: {
+              base: alias.base,
+              alias: alias.alias,
+              deviconId: devicon.id,
+            },
+          });
+        }
+      }
+
+      console.log(`Inserted data for ${entry.name}`);
+    }
+
+    console.log("All data has been successfully loaded into the database.");
+  } catch (error) {
+    console.error("Error loading data:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
