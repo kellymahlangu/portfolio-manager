@@ -2,20 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { SkillCategory } from "@prisma/client";
-import { Project, PartialProject, SkillForm } from "../../types";
+import { Project, PartialProject } from "../../types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
@@ -29,10 +21,6 @@ import {
   createProject,
   updateProject,
   deleteProject,
-  getSkills,
-  createSkill,
-  updateSkill,
-  deleteSkill,
   hasIconsLoaded,
 } from "@/app/actions";
 import { MultiSelect } from "@/components/ui/multi-select";
@@ -45,23 +33,13 @@ import {
 } from "@/components/ui/card";
 import { Suspense } from "react";
 import { UploadCloud } from "lucide-react";
-import { error } from "console";
-
 function ProjectsAndSkills() {
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
-  const [skills, setSkills] = useState<SkillForm[]>([]);
   const [newProject, setNewProject] = useState<PartialProject>({});
   const [editingProject, setEditingProject] = useState<
     Project | PartialProject
   >({});
-  const [newSkill, setNewSkill] = useState<SkillForm>({
-    name: "",
-    icon: "",
-    level: 0,
-    category: SkillCategory.FRONTEND,
-  });
-  const [editingSkill, setEditingSkill] = useState<SkillForm | null>(null);
   const [isNewProjectDialogOpen, setIsNewProjectDialogOpen] = useState(false);
   const [isEditProjectDialogOpen, setIsEditProjectDialogOpen] = useState(false);
   const [selectedStack, setSelectedStack] = useState<number[]>([]);
@@ -69,7 +47,6 @@ function ProjectsAndSkills() {
 
   useEffect(() => {
     getProjects().then(setProjects);
-    getSkills().then(setSkills);
     hasIconsLoaded().then(setHasIcons);
   }, []);
 
@@ -106,38 +83,8 @@ function ProjectsAndSkills() {
     router.refresh();
   };
 
-  const handleCreateSkill = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const createdSkill = await createSkill(newSkill);
-    setSkills([...skills, createdSkill]);
-    setNewSkill({
-      name: "",
-      icon: "",
-      level: 0,
-      category: SkillCategory.FRONTEND,
-    });
-    router.refresh();
-  };
 
-  const handleUpdateSkill = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!editingSkill || typeof editingSkill.id !== "number") return;
 
-    const updatedSkill = await updateSkill(editingSkill.id, editingSkill);
-    setSkills(
-      skills.map((skill) =>
-        skill.id === updatedSkill.id ? updatedSkill : skill
-      )
-    );
-    setEditingSkill(null);
-    router.refresh();
-  };
-
-  const handleDeleteSkill = async (id: number) => {
-    await deleteSkill(id);
-    setSkills(skills.filter((skill) => skill.id !== id));
-    router.refresh();
-  };
 
   const ProjectForm = ({
     project,
@@ -274,85 +221,6 @@ function ProjectsAndSkills() {
     </form>
   );
 
-  const SkillForm = ({
-    skill,
-    onSubmit,
-    buttonText,
-  }: {
-    skill: SkillForm;
-    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-    buttonText: string;
-  }) => (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <div>
-        <Label htmlFor="name">Name</Label>
-        <Input
-          id="name"
-          value={skill.name}
-          onChange={(e) =>
-            skill === newSkill
-              ? setNewSkill({ ...newSkill, name: e.target.value })
-              : setEditingSkill({ ...editingSkill!, name: e.target.value })
-          }
-        />
-      </div>
-      <div>
-        <Label htmlFor="icon">Icon</Label>
-        <Input
-          id="icon"
-          value={skill.icon}
-          onChange={(e) =>
-            skill === newSkill
-              ? setNewSkill({ ...newSkill, icon: e.target.value })
-              : setEditingSkill({ ...editingSkill!, icon: e.target.value })
-          }
-        />
-      </div>
-      <div>
-        <Label htmlFor="level">Level</Label>
-        <Input
-          id="level"
-          type="number"
-          value={skill.level}
-          onChange={(e) =>
-            skill === newSkill
-              ? setNewSkill({ ...newSkill, level: parseInt(e.target.value) })
-              : setEditingSkill({
-                  ...editingSkill!,
-                  level: parseInt(e.target.value),
-                })
-          }
-        />
-      </div>
-      <div>
-        <Label htmlFor="category">Category</Label>
-        <Select
-          value={skill.category}
-          onValueChange={(value) =>
-            skill === newSkill
-              ? setNewSkill({ ...newSkill, category: value as SkillCategory })
-              : setEditingSkill({
-                  ...editingSkill!,
-                  category: value as SkillCategory,
-                })
-          }
-        >
-          <SelectTrigger id="category">
-            <SelectValue placeholder="Select a category" />
-          </SelectTrigger>
-          <SelectContent>
-            {Object.values(SkillCategory).map((category) => (
-              <SelectItem key={category} value={category}>
-                {category}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-      <Button type="submit">{buttonText}</Button>
-    </form>
-  );
-
   const FileUploadForm = () => {
     const [jsonContent, setJsonContent] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -374,7 +242,7 @@ function ProjectsAndSkills() {
             setJsonContent(content);
             setError(null);
           } catch (err) {
-            setError("Invalid JSON file");
+            setError(`Invalid JSON file ${err}`);
             setJsonContent(null);
           }
         };
