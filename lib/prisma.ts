@@ -19,15 +19,15 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // Middleware to handle errors and log queries (optional)
-prisma.$use(async (params, next) => {
-  try {
-    const result = await next(params);
-    return result;
-  } catch (error) {
-    // console.error(`[Prisma Error]: ${error.message}`);
-    throw error; // Re-throw the error so the calling code is aware
-  }
-});
+// prisma.$use(async (params, next) => {
+//   try {
+//     const result = await next(params);
+//     return result;
+//   } catch (error) {
+//     // console.error(`[Prisma Error]: ${error.message}`);
+//     throw error; // Re-throw the error so the calling code is aware
+//   }
+// });
 
 // Graceful disconnect for Prisma Client on app shutdown
 async function disconnectPrisma() {

@@ -2,7 +2,7 @@
 
 import { Menu, X } from "lucide-react";
 import React, { useState } from "react";
-import ThemeToggle from "@/components/theme-toggle";
+import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
 // import { ReactComponent as FullLogo} from './../../public/logo-full.svg';
 import { useTheme } from "next-themes";
@@ -26,13 +26,13 @@ export function Header({ hasExp }: headerInfo) {
   };
 
   return (
-    <header className="z-50 shadow-sm fixed w-full backdrop-blur-md bg-background/50">
+    <header className="z-50 shadow-sm fixed w-screen backdrop-blur-md bg-background/50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="#home" className="flex items-center">
               <img
-                src={`/logo-full_${theme === undefined ? "dark" : theme}.svg`}
+                src={`/logo-full_${theme === "light" ? "light" : "dark"}.svg`}
                 className="h-64 w-64"
               />
             </Link>

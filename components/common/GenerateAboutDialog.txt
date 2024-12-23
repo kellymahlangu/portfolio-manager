@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { toast } from "@/hooks/use-toast";
 import { generateAboutMeParagraph } from "@/app/actions";
+import { toast } from "sonner";
 
 function GenerateAboutDialog() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -29,9 +29,7 @@ function GenerateAboutDialog() {
     setIsLoading(true);
     const response = await generateAboutMeParagraph();
     if (!response.status) {
-      toast({
-        variant: "destructive",
-        title: "Error",
+      toast.error("Error", {
         description: "Something went wrong while generating paragraphs",
       });
     }

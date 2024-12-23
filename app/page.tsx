@@ -1,7 +1,6 @@
 import AboutMe from "@/components/common/About";
 import Contact from "@/components/common/Contact";
 import Experiance from "@/components/common/Experience";
-import { Footer } from "@/components/common/Footer";
 import { Header } from "@/components/common/Header";
 import HeroSection from "@/components/common/Hero";
 import { Projects } from "@/components/common/Projects";
@@ -9,11 +8,11 @@ import Skills from "@/components/common/Skills";
 import InDevPop from "@/components/InDev";
 import {
   getAboutInfo,
+  getActiveSkills,
   getBasicInfo,
+  getExperiences,
   getProjects,
-  getSkills,
 } from "@/app/actions";
-import { fetchExperience } from "./_actions/expreience";
 
 type componentType = {
   id: string;
@@ -22,7 +21,7 @@ type componentType = {
 export default async function Home() {
   const basicRecord = await getBasicInfo();
   const aboutRecord = await getAboutInfo();
-  const skillRecord = await getSkills();
+  const skillRecord = await getActiveSkills();
   const projectRecord = await getProjects();
 
   if (!basicRecord || !aboutRecord || !skillRecord || !projectRecord) {
@@ -33,7 +32,7 @@ export default async function Home() {
     );
   }
 
-  const experienceRecord = await fetchExperience();
+  const experienceRecord = await getExperiences();
 
   const components: componentType[] = [
     {
@@ -45,7 +44,7 @@ export default async function Home() {
           lastName={basicRecord.surname}
           occupation={basicRecord.occupation}
           slogan={basicRecord.tagline}
-          img={basicRecord.summeryVid}
+          img={basicRecord.summeryVid || ""}
         />
       ),
     },
@@ -55,9 +54,7 @@ export default async function Home() {
         <AboutMe
           key={1}
           img={aboutRecord.img}
-          p1={aboutRecord.p1}
-          p2={aboutRecord.p2}
-          p3={aboutRecord.p3}
+          paragraph={aboutRecord.paragraph}
           cv={aboutRecord.cv}
         />
       ),
@@ -82,25 +79,23 @@ export default async function Home() {
   ];
 
   return (
-    <main className="w-screen">
-      <div className="min-h-screen w-full flex flex-col items-center justify-center p-4">
-        <div className="max-w-full w-full">
-          <Header
-            title={basicRecord.title}
-            hasExp={experienceRecord.length > 0}
-          />
-          {components.map((comp, index) => (
-            <section
-              className={`h-screen w-full flex flex-col items-center justify-center`}
-              key={index}
-              id={comp.id}
-            >
-              {comp.component}
-            </section>
-          ))}
-          <Footer />,
-        </div>
+    <main>
+      {/* <div className="min-w-screen">
+      <div> */}
+      <Header title={basicRecord.title} hasExp={experienceRecord.length > 0} />
+      <div className="h-screen overflow-y-scroll snap-y snap-mandatory scroll-smooth">
+        {components.map((comp, index) => (
+          <section
+            className={`min-h-screen w-full flex flex-col items-center justify-center snap-start`}
+            key={index}
+            id={comp.id}
+          >
+            {comp.component}
+          </section>
+        ))}
       </div>
+      {/* </div>
+      </div> */}
     </main>
   );
 }
