@@ -13,10 +13,8 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
-import { url } from "inspector";
 import { CircleUser, LucideProps, Mailbox, PencilRuler } from "lucide-react";
 import Link from "next/link";
-import { title } from "process";
 import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
 
 const items = [
