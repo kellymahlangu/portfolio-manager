@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar";
-import { CircleUser, LucideProps, PencilRuler } from "lucide-react";
+import { CircleUser, LucideProps, Mailbox, PencilRuler } from "lucide-react";
 import Link from "next/link";
 import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
 
@@ -27,6 +27,11 @@ const items = [
     title: "Skills and Projects",
     url: "/admin/skillsandprojects",
     icon: PencilRuler,
+  },
+  {
+    title: "Contact List",
+    url: "/admin/contact",
+    icon: Mailbox,
   },
 ];
 
