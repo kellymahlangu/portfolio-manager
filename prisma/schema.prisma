@@ -31,7 +31,7 @@ model Basic {
   surname    String
   occupation String
   tagline    String
-  summeryVid String  @default("Nothing here")
+  summeryVid String?
 }
 
 model AboutQuestions {
@@ -46,25 +46,24 @@ model AboutQuestions {
 
 // About infomation for portfolio user
 model About {
-  id  BasicId @id @default(USER)
-  img String
-  p1  String
-  p2  String
-  p3  String
-  cv  String
+  id        BasicId @id @default(USER)
+  img       String?
+  paragraph String
+  cv        String
 }
 
 // Languages and Tools know and used by owner
 model Skill {
   id       Int           @id @default(autoincrement())
-  name     String
-  icon     String
   level    Int
-  category SkillCategory
+  details  Devicon       @relation(fields: [deviconId], references: [id])
+  category SkillCategory @default(FRONTEND)
+  isKnown  Boolean
 
   Project Project[]
 
   Experience Experience[]
+  deviconId  Int
 }
 
 // Projects done by owner
@@ -113,7 +112,8 @@ model Devicon {
   versions   Versions @relation(fields: [versionsId], references: [id])
   versionsId Int
   aliases    Alias[]
-  isKnown    Boolean  @default(false)
+  // isKnown    Boolean  @default(false)
+  Skill      Skill[]
 }
 
 model Versions {

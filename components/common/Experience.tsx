@@ -1,29 +1,12 @@
-"use server";
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { $Enums } from "@prisma/client";
 import React from "react";
 import { CustomIcon } from "../ui/icon";
+import { GetExperiencesReturnType } from "@/app/types";
 
-type experienceRecord = {
-  skills: {
-    id: number;
-    name: string;
-    icon: string;
-    level: number;
-    category: $Enums.SkillCategory;
-  }[];
-} & {
-  id: number;
-  company: string;
-  role: string;
-  start: Date;
-  end: Date | null;
-  summary: string;
-  achievements: string[];
-};
 interface ExperianceProps {
-  experiances: experienceRecord[];
+  experiances: GetExperiencesReturnType[];
 }
 
 export default async function Experiance({ experiances }: ExperianceProps) {
@@ -56,8 +39,11 @@ export default async function Experiance({ experiances }: ExperianceProps) {
                     variant="outline"
                     className="flex items-center gap-1"
                   >
-                    <CustomIcon src={skill.icon} className="h-4 w-4"/>
-                    {skill.name}
+                    <CustomIcon
+                      src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${skill.details.name}/${skill.details.name}-${skill.details.versions.svg[0]}.svg`}
+                      className="h-4 w-4"
+                    />
+                    {skill.details.name}
                   </Badge>
                 ))}
               </div>

@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "About" ALTER COLUMN "img" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "Basic" ALTER COLUMN "summeryVid" DROP NOT NULL,
+ALTER COLUMN "summeryVid" DROP DEFAULT;

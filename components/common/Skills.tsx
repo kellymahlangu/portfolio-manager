@@ -1,12 +1,12 @@
-"use server";
+"use client";
 
 import { Progress } from "@/components/ui/progress";
 import React from "react";
 import { CustomIcon } from "../ui/icon";
-import { Skill } from "@prisma/client";
+import { FetchSkill } from "@/app/types";
 
 interface SkillsProps {
-  skillList: Skill[];
+  skillList: FetchSkill[];
 }
 export default async function Skills({ skillList }: SkillsProps) {
   const frontendList = skillList.filter(
@@ -29,8 +29,11 @@ export default async function Skills({ skillList }: SkillsProps) {
                 <li key={skill.id} className="space-y-2">
                   <div className="flex justify-between">
                     <span className="flex items-center space-x-2  rounded-full px-3 py-1">
-                      <i className="devicon-javascript-plain"></i>
-                      {skill.name.charAt(0).toUpperCase() + skill.name.slice(1)}
+                      <CustomIcon
+                        src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${skill.details.name}/${skill.details.name}-${skill.details.versions.svg[0]}.svg`}
+                        className="mr-1.5"
+                      />
+                      <span>{skill.details.name}</span>
                     </span>
                     <span>{skill.level}%</span>
                   </div>
@@ -50,8 +53,11 @@ export default async function Skills({ skillList }: SkillsProps) {
                 <li key={skill.id} className="space-y-2">
                   <div className="flex justify-between">
                     <span className="flex items-center space-x-2  rounded-full px-3 py-1">
-                      <CustomIcon src={skill.icon} className="mr-1.5" />
-                      {skill.name.charAt(0).toUpperCase() + skill.name.slice(1)}
+                      <CustomIcon
+                        src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${skill.details.name}/${skill.details.name}-${skill.details.versions.svg[0]}.svg`}
+                        className="mr-1.5"
+                      />
+                      <span>{skill.details.name}</span>
                     </span>
                     <span>{skill.level}%</span>
                   </div>
@@ -72,10 +78,11 @@ export default async function Skills({ skillList }: SkillsProps) {
                   key={skill.id}
                   className="flex items-center space-x-2  rounded-full px-3 py-1"
                 >
-                  <CustomIcon src={skill.icon} className="mr-1.5" />
-                  <span>
-                    {skill.name.charAt(0).toUpperCase() + skill.name.slice(1)}
-                  </span>
+                  <CustomIcon
+                    src={`https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/${skill.details.name}/${skill.details.name}-${skill.details.versions.svg[0]}.svg`}
+                    className="mr-1.5"
+                  />
+                  <span>{skill.details.name}</span>
                 </li>
               ))}
             </ul>

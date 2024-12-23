@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Kelly Mahlngu",
@@ -15,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-hidden">
       <head>
         <link
           rel="stylesheet"
@@ -25,14 +24,11 @@ export default function RootLayout({
       <body>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
-          disableTransitionOnChange
         >
-          <SidebarProvider>
-            {children}
-            <Toaster />
-          </SidebarProvider>
+          {children}
+          <Toaster position="top-right" />
         </ThemeProvider>
       </body>
     </html>

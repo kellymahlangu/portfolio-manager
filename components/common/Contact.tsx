@@ -1,85 +1,101 @@
 "use client";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { submitContact } from "@/app/_actions/contact";
-import { useToast } from "@/hooks/use-toast";
-import { TiThumbsOk } from "react-icons/ti";
-import { FaRegFaceSadTear } from "react-icons/fa6";
+import { Footer } from "./Footer";
+import { toast } from "sonner";
+import Link from "next/link";
+import { submitContact } from "@/app/actions";
 
 export default function Contact() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
-  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+    atm: true,
+  });
+  const handleTextChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { id, value } = e.target;
+    console.log(`{id: ${e.target.id}, value: ${e.target.value}}`);
+    setFormData({ ...formData, [id]: value });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const isSubmited = await submitContact({ name, email, subject, message });
-    toast(
-      isSubmited
-        ? {
-            title: "Thank You for Reaching Out!",
-            description:
-              "Your message has been successfully sent. I’ll get back to you as soon as possible. Have a great day!",
-            action: <TiThumbsOk className="w-20 h-20" />,
-          }
-        : {
-            variant: "destructive",
-            title: "Oops! Something Went Wrong.",
-            description:
-              "There was an error submitting your information. Please try again or check your internet connection.",
-            action: <FaRegFaceSadTear className="w-20 h-20" />,
-          }
-    );
+    const isSubmited = await submitContact(formData);
+    if (isSubmited) {
+      toast.success(
+        "You request has been submited and you'll be contacted as soon as possible"
+      );
+    } else {
+      toast.error(
+        "An Error has occured please try again, if error persists reload page or verify internet access"
+      );
+    }
   };
 
   return (
-    <div className="w-1/2">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <h1 className="text-3xl font-bold mb-6">Get in Touch</h1>
-        <div>
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="subject">Subject (Optional)</Label>
-          <Input
-            id="subject"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          />
-        </div>
-        <div>
-          <Label htmlFor="message">Message</Label>
-          <Textarea
-            id="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            required
-            className="min-h-[150px]"
-          />
-        </div>
-        <Button type="submit">Submit</Button>
-      </form>
-    </div>
+    <>
+      <div className="w-1/2">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <h1 className="text-3xl font-bold mb-6">Get in Touch</h1>
+          <div>
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              value={formData.name}
+              onChange={handleTextChange}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              value={formData.email}
+              onChange={handleTextChange}
+              required
+            />
+          </div>
+          <div>
+            <Label htmlFor="subject">Subject (Optional)</Label>
+            <Input
+              id="subject"
+              value={formData.subject}
+              onChange={handleTextChange}
+            />
+          </div>
+          <div>
+            <Label htmlFor="message">Message</Label>
+            <Textarea
+              id="message"
+              value={formData.message}
+              onChange={handleTextChange}
+              required
+              className="min-h-[150px]"
+            />
+          </div>
+          <Button type="submit">Submit</Button>
+          <p>
+            By submitting this form, you consent to receive marketing messages
+            in accordance with the{" "}
+            <Link
+              href={"/privacy"}
+              className="text-cyan-700 dark:text-cyan-400"
+            >
+              privacy policy
+            </Link>
+            .
+          </p>
+        </form>
+      </div>
+      <Footer />
+    </>
   );
 }

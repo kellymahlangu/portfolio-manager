@@ -86,3 +86,15 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.slick-slide {
+  padding: 0 10px;
+}
+
+.slick-dots {
+  bottom: -40px;
+}
+
+.slick-dots li button:before {
+  font-size: 12px;
+}

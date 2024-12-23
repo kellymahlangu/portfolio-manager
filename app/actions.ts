@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import {
@@ -7,7 +9,14 @@ import {
   AboutQuestions,
   Basic,
 } from "@prisma/client";
-import { Project, PartialProject, SkillForm } from "@/app/types";
+import {
+  Project,
+  PartialProject,
+  DeviconEntry,
+  UpdateSkill,
+  ContactProps,
+} from "@/app/types";
+import { disconnectPrisma } from "@/lib/prisma";
 
 const prisma = new PrismaClient();
 
@@ -33,22 +42,97 @@ export async function updateAboutInfo(data: Prisma.AboutUpdateInput) {
   });
 }
 
-export async function getSkills() {
-  return await prisma.skill.findMany();
+export async function totalSkills() {
+  return await prisma.skill.count();
 }
 
-export async function createSkill(data: SkillForm): Promise<SkillForm> {
-  return (await prisma.skill.create({ data })) as SkillForm;
+export async function getSkills(page: number, skillId?: number) {
+  if (skillId) {
+    const item = await prisma.skill.findUnique({
+      where: { id: skillId },
+      include: {
+        details: {
+          select: {
+            name: true,
+            versions: {
+              select: {
+                svg: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (item) {
+      return [item];
+    } else {
+      return [];
+    }
+  }
+  const startIndex = (page - 1) * 10;
+
+  return await prisma.skill.findMany({
+    skip: startIndex,
+    take: 10,
+    include: {
+      details: {
+        select: {
+          name: true,
+          versions: {
+            select: {
+              svg: true,
+            },
+          },
+        },
+      },
+    },
+  });
 }
 
-export async function updateSkill(
-  id: number,
-  data: SkillForm
-): Promise<SkillForm> {
-  return (await prisma.skill.update({
-    where: { id },
-    data,
-  })) as SkillForm;
+export async function getActiveSkills() {
+  const list = await prisma.skill.findMany({
+    where: {
+      isKnown: true,
+    },
+    include: {
+      details: {
+        select: {
+          name: true,
+          versions: {
+            select: {
+              svg: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return list;
+}
+
+export async function updateSkill({
+  id,
+  type,
+  progress,
+  isActive,
+}: UpdateSkill) {
+  try {
+    await prisma.skill.update({
+      where: { id },
+      data: {
+        level: progress,
+        category: type,
+        isKnown: isActive,
+      },
+    });
+
+    return { success: true, msg: "Skill updated successfully" };
+  } catch (error) {
+    console.log(error);
+
+    return { success: false, msg: "Someting went wrong" };
+  }
 }
 
 export async function deleteSkill(id: number) {
@@ -56,7 +140,11 @@ export async function deleteSkill(id: number) {
 }
 
 export async function getProjects() {
-  return await prisma.project.findMany({ include: { stack: true } });
+  return await prisma.project.findMany({
+    include: {
+      stack: { include: { details: { include: { versions: true } } } },
+    },
+  });
 }
 
 export async function createProject(data: PartialProject): Promise<Project> {
@@ -103,7 +191,11 @@ export async function deleteProject(id: string) {
 }
 
 export async function getExperiences() {
-  return await prisma.experience.findMany({ include: { skills: true } });
+  return await prisma.experience.findMany({
+    include: {
+      skills: { include: { details: { include: { versions: true } } } },
+    },
+  });
 }
 
 export async function createExperience(data: Prisma.ExperienceCreateInput) {
@@ -123,6 +215,34 @@ export async function updateExperience(
 
 export async function deleteExperience(id: number) {
   return await prisma.experience.delete({ where: { id } });
+}
+
+export async function submitContact({
+  name,
+  email,
+  subject,
+  message,
+  atm,
+}: ContactProps) {
+  try {
+    // send notification to mobile phone using a Push Notification Service
+    await prisma.contact.create({
+      data: {
+        name,
+        email: email.toLowerCase(),
+        subject,
+        message,
+        isSubscribed: atm,
+      },
+    });
+
+    return true;
+  } catch (error) {
+    console.error("An error has occured:", error);
+    return false;
+  } finally {
+    await disconnectPrisma();
+  }
 }
 
 export async function getContacts() {
@@ -156,7 +276,7 @@ export async function updateAboutMe({
 }: {
   about: AboutQuestions;
   basic: Basic;
-  files: { headshot: string; cv: string };
+  files: { headshot: string; cv: string; paragraph: string };
 }) {
   const basicDb = await getBasicInfo();
   const aboutDB = await getAboutInfo();
@@ -170,9 +290,7 @@ export async function updateAboutMe({
     await prisma.about.create({
       data: {
         id: "USER",
-        p1: "Paragraph 1",
-        p2: "Paragraph 2",
-        p3: "Paragraph 3",
+        paragraph: files.paragraph,
         img: files.headshot,
         cv: files.cv,
       },
@@ -189,9 +307,7 @@ export async function updateAboutMe({
     await prisma.about.update({
       where: { id: BasicId.USER },
       data: {
-        p1: "Paragraph 1",
-        p2: "Paragraph 2",
-        p3: "Paragraph 3",
+        paragraph: files.paragraph,
         img: files.headshot,
         cv: files.cv,
       },
@@ -203,37 +319,94 @@ export async function updateAboutMe({
   return { succes: true, data: "" };
 }
 
-export async function generateAboutMeParagraph() {
-  const questions = await getAboutQuestions();
-  const me = await getBasicInfo();
-  if (!questions || !me) {
-    return {
-      status: false,
-      data: { p1: "", p2: "", p3: "" },
-    };
-  }
-  const promt = `Write a 3-paragraph "About Me" for a professional. Here's some information to guide the writing:
-    - name: ${me.name}
-    - surname: ${me.surname}
-    - occupation: ${me.occupation}
-    - tagline/slogan: ${me.tagline} (just use as insperation but not include the actual tagline)
-    - Specialization: ${questions.specialization}
-    - Excitement: ${questions.excitement}
-    - Years of Experience: ${questions.yearsOfExperience}
-    - Problems Solved: ${questions.problemsSolved}
-    - Motivation: ${questions.motivation}
-    - Interests: ${questions.interests}
-  `;
-  console.log(promt);
-  await new Promise((resolve) => setTimeout(resolve, 5000));
-  return {
-    status: true,
-    data: { p1: "Paragraph 1", p2: "Paragraph 2", p3: "Paragraph 3" },
-  };
-}
-
 export async function hasIconsLoaded() {
   const icons = await prisma.devicon.findMany();
   return icons.length !== 0;
 }
 
+export async function stringToObject(jsonContent: string) {
+  const cleanedArray: DeviconEntry[] = [];
+  let errorCount = 0;
+  const jsonData = JSON.parse(jsonContent);
+
+  for (const entry of jsonData) {
+    const isValid = isDeviconEntry(entry);
+    if (isValid) {
+      cleanedArray.push(entry);
+    } else {
+      errorCount++;
+    }
+  }
+
+  return { icons: cleanedArray, errorCount };
+}
+export async function cleanIcons(data: DeviconEntry[]) {
+  const existingIcons = await prisma.devicon.findMany({
+    where: { name: { in: data.map((item) => item.name) } },
+    select: { name: true },
+  });
+
+  const newIcons = data.filter(
+    (item) => !existingIcons.some((existing) => existing.name === item.name)
+  );
+
+  return newIcons;
+}
+
+export async function createIconInDb(entry: DeviconEntry) {
+  try {
+    const devicon = await prisma.devicon.create({
+      data: {
+        name: entry.name,
+        altnames: entry.altnames,
+        tags: entry.tags,
+        versions: {
+          create: {
+            svg: entry.versions.svg,
+            font: entry.versions.font,
+          },
+        },
+        color: entry.color,
+        aliases: {
+          create: entry.aliases.map((alias) => ({
+            base: alias.base,
+            alias: alias.alias,
+          })),
+        },
+      },
+    });
+
+    await prisma.skill.create({
+      data: {
+        level: 0,
+        isKnown: false,
+        deviconId: devicon.id,
+      },
+    });
+
+    return { success: true, msg: "success" };
+  } catch (error) {
+    return { success: false, msg: "Something went wrong!", error };
+  }
+}
+
+function isDeviconEntry(entry: any): entry is DeviconEntry {
+  return (
+    typeof entry.name === "string" &&
+    Array.isArray(entry.altnames) &&
+    entry.altnames.every((altname: any) => typeof altname === "string") &&
+    Array.isArray(entry.tags) &&
+    entry.tags.every((tag: any) => typeof tag === "string") &&
+    typeof entry.versions === "object" &&
+    Array.isArray(entry.versions.svg) &&
+    entry.versions.svg.every((svg: any) => typeof svg === "string") &&
+    Array.isArray(entry.versions.font) &&
+    entry.versions.font.every((font: any) => typeof font === "string") &&
+    typeof entry.color === "string" &&
+    Array.isArray(entry.aliases) &&
+    entry.aliases.every(
+      (alias: { base: any; alias: any }) =>
+        typeof alias.base === "string" && typeof alias.alias === "string"
+    )
+  );
+}
