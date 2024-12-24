@@ -22,6 +22,7 @@ export function middleware(request: NextRequest) {
     (isProduction && splitHost.length === 4)
   ) {
     subdomain = splitHost[0];
+    console.log(subdomain);
   }
 
   // Check if the request is for a static asset
