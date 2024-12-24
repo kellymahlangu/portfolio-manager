@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
   // Check if we're in production or development
   const isProduction = process.env.NODE_ENV === "production";
   const vercel = process.env.VERCEL_DEV === "true";
-  //   const baseDomain = isProduction ? process.env.BASE_DOMAIN : "localhost:3000";
+  const pathname = request.nextUrl.pathname;
 
   // Extract the subdomain
   let subdomain;
@@ -22,15 +22,14 @@ export function middleware(request: NextRequest) {
     (isProduction && splitHost.length === 4)
   ) {
     subdomain = splitHost[0];
-    console.log(subdomain);
   }
 
   // Check if the request is for a static asset
   const isStaticAsset =
-    request.nextUrl.pathname.startsWith("/_next/") ||
-    request.nextUrl.pathname.startsWith("/static/") ||
-    request.nextUrl.pathname.endsWith(".css") ||
-    request.nextUrl.pathname.endsWith(".js");
+    pathname.startsWith("/_next/") ||
+    pathname.startsWith("/static/") ||
+    pathname.endsWith(".css") ||
+    pathname.endsWith(".js");
 
   // If it's a static asset, don't rewrite
   if (isStaticAsset) {
@@ -40,11 +39,13 @@ export function middleware(request: NextRequest) {
   // Handle subdomains
   if (subdomain === "admin") {
     // Rewrite admin subdomain requests to /admin path
-    return NextResponse.rewrite(
-      new URL(`/admin${request.nextUrl.pathname}`, request.url)
-    );
-  } else if (subdomain) {
-    // return NextResponse.error();
+    return NextResponse.rewrite(new URL(`/admin${pathname}`, request.url));
+  }
+
+  console.log(pathname.split("/"));
+
+  if (pathname.split("/")[1] !== "") {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // For requests to the base domain, continue normally
