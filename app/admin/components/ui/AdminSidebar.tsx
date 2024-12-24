@@ -33,8 +33,19 @@ const items = [
     icon: Mailbox,
   },
 ];
+interface AdminSidebarProps {
+  user: {
+    id: string;
+    email: string;
+    emailVerified: boolean;
+    name: string;
+    createdAt: Date;
+    updatedAt: Date;
+    image?: string | null | undefined | undefined;
+  };
+}
 
-const AdminSidebar = () => {
+const AdminSidebar = ({ user }: AdminSidebarProps) => {
   const [activeItem, setActiveItem] = useState<{
     title: string;
     url: string;
@@ -47,8 +58,8 @@ const AdminSidebar = () => {
       <SidebarHeader>
         <NavUser
           user={{
-            name: "Kelly Mahlangu",
-            email: "kellymahlangu@gmail.com",
+            name: user.name,
+            email: user.email,
             avatar: "",
           }}
         />
