@@ -1,9 +1,13 @@
+"use client";
+
+import { NavUser } from "@/components/admin/NavUser";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -15,17 +19,17 @@ import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
 const items = [
   {
     title: "Basic Information",
-    url: "/admin/about",
+    url: "/about",
     icon: CircleUser,
   },
   {
     title: "Skills and Projects",
-    url: "/admin/skillsandprojects",
+    url: "/skillsandprojects",
     icon: PencilRuler,
   },
   {
     title: "Contact List",
-    url: "/admin/contact",
+    url: "/contact",
     icon: Mailbox,
   },
 ];
@@ -40,6 +44,15 @@ const AdminSidebar = () => {
   }>();
   return (
     <Sidebar>
+      <SidebarHeader>
+        <NavUser
+          user={{
+            name: "Kelly Mahlangu",
+            email: "kellymahlangu@gmail.com",
+            avatar: "",
+          }}
+        />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
