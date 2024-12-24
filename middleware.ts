@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
     (!isProduction && splitHost.length === 2) ||
     (isProduction && splitHost.length === 4)
   ) {
-    subdomain = splitHost[0];
+    subdomain = splitHost[1];
     console.log(subdomain);
   }
 
