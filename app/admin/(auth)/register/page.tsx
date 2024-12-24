@@ -37,7 +37,7 @@ export default function Page() {
         <div className={cn("flex flex-col gap-6")}>
           <Card>
             <CardHeader>
-              <CardTitle className="text-2xl">Login</CardTitle>
+              <CardTitle className="text-2xl">Register</CardTitle>
             </CardHeader>
             <CardContent>
               <form>
@@ -47,7 +47,7 @@ export default function Page() {
                     <Input
                       id="name"
                       type="text"
-                      value={registerData.email}
+                      value={registerData.name}
                       onChange={(e) =>
                         setRegisterData({
                           ...registerData,
