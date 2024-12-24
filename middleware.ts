@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
     (!isProduction && splitHost.length === 2) ||
     (isProduction && splitHost.length === 4)
   ) {
-    subdomain = splitHost[1];
+    subdomain = splitHost[0];
     console.log(subdomain);
   }
 
@@ -44,7 +44,7 @@ export function middleware(request: NextRequest) {
       new URL(`/admin${request.nextUrl.pathname}`, request.url)
     );
   } else if (subdomain) {
-    return NextResponse.error();
+    // return NextResponse.error();
   }
 
   // For requests to the base domain, continue normally
