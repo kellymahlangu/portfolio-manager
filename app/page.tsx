@@ -139,7 +139,7 @@ export default function Home() {
 
   if (!basicRecord || !aboutRecord) {
     if (data) {
-      console.log(data);
+      console.log({ basicRecord, aboutRecord });
       return (
         <div className="min-h-screen flex flex-col">
           <p>
