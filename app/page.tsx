@@ -17,6 +17,8 @@ import {
 } from "@/app/actions";
 import { useEffect, useState } from "react";
 import { $Enums } from "@prisma/client";
+import { useSession } from "@/lib/auth-client";
+import { Check, X } from "lucide-react";
 
 type componentType = {
   id: string;
@@ -108,6 +110,7 @@ export default function Home() {
   const [experienceRecord, setExperienceRecord] = useState<
     ExperienceWithDetails[]
   >([]);
+  const { data } = useSession();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -134,7 +137,22 @@ export default function Home() {
     fetchData();
   }, []);
 
-  if (!basicRecord || !aboutRecord || !skillRecord || !projectRecord) {
+  if (!basicRecord || !aboutRecord) {
+    if (data) {
+      console.log(data);
+      return (
+        <div className="min-h-screen flex flex-col">
+          <p>
+            <strong>Basic Details</strong>
+            {basicRecord ? <Check /> : <X />}
+          </p>
+          <p>
+            <strong>About Details</strong>
+            {aboutRecord ? <Check /> : <X />}
+          </p>
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen flex flex-col">
         <InDevPop />
@@ -167,11 +185,24 @@ export default function Home() {
         />
       ),
     },
-    { id: "skills", component: <Skills skillList={skillRecord} key={2} /> },
-    {
-      id: "projects",
-      component: <Projects key={3} projects={projectRecord} />,
-    },
+    ...(skillRecord.length > 0
+      ? [
+          {
+            id: "skills",
+            component: <Skills skillList={skillRecord} key={2} />,
+          },
+        ]
+      : []),
+
+    ...(projectRecord.length > 0
+      ? [
+          {
+            id: "projects",
+            component: <Projects key={3} projects={projectRecord} />,
+          },
+        ]
+      : []),
+
     ...(experienceRecord.length > 0
       ? [
           {
