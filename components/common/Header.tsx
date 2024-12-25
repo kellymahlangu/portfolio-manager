@@ -25,6 +25,10 @@ export function Header({ hasExp }: headerInfo) {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const logoLink = `https://kellymahlangu.sirv.com/portfolio/logo-full_${
+    theme === "light" ? "light" : "dark"
+  }.svg`;
+
   return (
     <header className="z-50 shadow-sm fixed w-screen backdrop-blur-md bg-background/50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,7 +36,7 @@ export function Header({ hasExp }: headerInfo) {
           <div className="flex items-center">
             <Link href="#home" className="flex items-center">
               <img
-                src={`/logo-full_${theme === "light" ? "light" : "dark"}.svg`}
+                src={logoLink}
                 className="h-64 w-64"
               />
             </Link>

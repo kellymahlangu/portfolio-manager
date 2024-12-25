@@ -1,3 +1,5 @@
+"use client"
+
 import AboutMe from "@/components/common/About";
 import Contact from "@/components/common/Contact";
 import Experiance from "@/components/common/Experience";
