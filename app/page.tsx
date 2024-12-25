@@ -79,7 +79,7 @@ type ExperienceWithDetails = {
   }[];
 };
 
-export default async function Home() {
+export default function Home() {
   const [basicRecord, setBasicRecord] = useState<{
     id: "USER";
     name: string;
@@ -110,11 +110,28 @@ export default async function Home() {
   >([]);
 
   useEffect(() => {
-    getBasicInfo().then(setBasicRecord);
-    getAboutInfo().then(setAboutRecord);
-    getActiveSkills().then(setSkillRecord);
-    getProjects().then(setProjectRecord);
-    getExperiences().then(setExperienceRecord);
+    const fetchData = async () => {
+      try {
+        const [basicInfo, aboutInfo, activeSkills, projects, experiences] =
+          await Promise.all([
+            getBasicInfo(),
+            getAboutInfo(),
+            getActiveSkills(),
+            getProjects(),
+            getExperiences(),
+          ]);
+
+        setBasicRecord(basicInfo);
+        setAboutRecord(aboutInfo);
+        setSkillRecord(activeSkills);
+        setProjectRecord(projects);
+        setExperienceRecord(experiences);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   if (!basicRecord || !aboutRecord || !skillRecord || !projectRecord) {
