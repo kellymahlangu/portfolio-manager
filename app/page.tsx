@@ -321,12 +321,14 @@ function Page() {
           key={1}
           id="about"
         >
-          <h2 className="text-2xl font-bold mb-6">Who Am I?</h2>
-          <div className="space-y-4">
-            <p>{info.about.paragraph}</p>
-            <Button asChild className="mt-4">
-              <Link href={info.about.cv}>View Full Resume</Link>
-            </Button>
+          <div className="w-full max-w-3xl mx-auto py-12 px-4">
+            <h2 className="text-2xl font-bold mb-6">Who Am I?</h2>
+            <div className="space-y-4">
+              <p>{info.about.paragraph}</p>
+              <Button asChild className="mt-4">
+                <Link href={info.about.cv}>View Full Resume</Link>
+              </Button>
+            </div>
           </div>
         </section>
         {/* Skills */}
