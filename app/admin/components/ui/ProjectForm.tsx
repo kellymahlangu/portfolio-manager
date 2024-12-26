@@ -27,6 +27,7 @@ interface ProjectFormProps {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   setEditingProject: Dispatch<SetStateAction<Project | PartialProject | null>>;
   setNewProject: Dispatch<SetStateAction<PartialProject>>;
+  isLoading: boolean;
 }
 
 type allSkills = ({ details: { name: string; versions: { svg: string[] } } } & {
@@ -43,6 +44,7 @@ function ProjectForm({
   headingText,
   setEditingProject,
   setNewProject,
+  isLoading,
 }: ProjectFormProps) {
   // const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [allSkills, setAllSkills] = useState<allSkills>();
@@ -120,6 +122,7 @@ function ProjectForm({
           <div>
             <Label htmlFor="name">Name</Label>
             <Input
+              disabled={isLoading}
               id="name"
               value={project.name || ""}
               onChange={handleTextChange}
@@ -128,6 +131,7 @@ function ProjectForm({
           <div>
             <Label htmlFor="description">Description</Label>
             <Textarea
+              disabled={isLoading}
               id="description"
               value={project.description || ""}
               onChange={handleTextChange}
@@ -136,6 +140,7 @@ function ProjectForm({
           <div>
             <Label htmlFor="stack">Select Tech Stack Used</Label>
             <MultiSelect
+              disabled={isLoading}
               options={skillList}
               value={project.stack?.map((item) => item.id.toString()) || []}
               onValueChange={updateSkill}
@@ -149,6 +154,7 @@ function ProjectForm({
           </div>
           <div className="flex items-center space-x-2">
             <Button
+              disabled={isLoading}
               id="isOpenSource"
               variant="ghost"
               size="icon"
@@ -168,6 +174,7 @@ function ProjectForm({
           <div>
             <Label htmlFor="liveUrl">Live URL</Label>
             <Input
+              disabled={isLoading}
               id="liveUrl"
               value={project.liveUrl}
               onChange={handleTextChange}
@@ -177,6 +184,7 @@ function ProjectForm({
             <div>
               <Label htmlFor="repoUrl">Repo URL</Label>
               <Input
+                disabled={isLoading}
                 id="repoUrl"
                 value={project.repoUrl || ""}
                 onChange={handleTextChange}
@@ -186,10 +194,17 @@ function ProjectForm({
 
           <div>
             <Label htmlFor="img">Image URL</Label>
-            <Input id="img" value={project.img} onChange={handleTextChange} />
+            <Input
+              id="img"
+              disabled={isLoading}
+              value={project.img}
+              onChange={handleTextChange}
+            />
           </div>
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isLoading}>
+            Submit
+          </Button>
         </form>
       </CardContent>
     </Card>

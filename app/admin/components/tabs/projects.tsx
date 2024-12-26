@@ -14,6 +14,7 @@ import ProjectForm from "../ui/ProjectForm";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ProjectsTab = () => {
+  const [isLoading, SetIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [newProject, setNewProject] = useState<PartialProject>({});
@@ -30,15 +31,18 @@ const ProjectsTab = () => {
 
   const handleCreateProject = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    SetIsLoading(true);
     const createdProject = await createProject(newProject);
     setProjects([...projects, createdProject]);
     setNewProject({});
+    // SetIsLoading()
     setIsNewProjectCardVisible(false);
     router.refresh();
   };
 
   const handleUpdateProject = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    SetIsLoading(true);
     if (!editingProject || !editingProject.id) return;
     const updatedProject = await updateProject(
       editingProject.id,
@@ -87,6 +91,7 @@ const ProjectsTab = () => {
               headingText={"Add New Project"}
               setEditingProject={setEditingProject}
               setNewProject={setNewProject}
+              isLoading={isLoading}
             />
           </motion.div>
         )}
@@ -132,6 +137,7 @@ const ProjectsTab = () => {
               headingText="Edit Project"
               setEditingProject={setEditingProject}
               setNewProject={setNewProject}
+              isLoading={isLoading}
             />
           </motion.div>
         )}
