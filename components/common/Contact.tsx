@@ -4,10 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Footer } from "./Footer";
 import { toast } from "sonner";
-import Link from "next/link";
 import { submitContact } from "@/app/actions";
+import { PrivacyPolicyDialog } from "../privacy-policy-dialog";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -84,18 +83,10 @@ export default function Contact() {
           <Button type="submit">Submit</Button>
           <p>
             By submitting this form, you consent to receive marketing messages
-            in accordance with the{" "}
-            <Link
-              href={"/privacy"}
-              className="text-cyan-700 dark:text-cyan-400"
-            >
-              privacy policy
-            </Link>
-            .
+            in accordance with the <PrivacyPolicyDialog />.
           </p>
         </form>
       </div>
-      <Footer />
     </>
   );
 }

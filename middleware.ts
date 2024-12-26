@@ -42,6 +42,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(`/admin${pathname}`, request.url));
   }
 
+  if (pathname.split("/")[1] === "api") {
+    return NextResponse.next();
+  }
+
   if (pathname.split("/")[1] !== "") {
     return NextResponse.redirect(new URL("/", request.url));
   }
