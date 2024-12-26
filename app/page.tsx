@@ -28,6 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/common/Footer";
 import { toast } from "sonner";
 import Loader from "@/components/common/Loader";
+import { FaGithub } from "react-icons/fa";
 
 type ProjectWithDetails = {
   id: string;
@@ -286,7 +287,7 @@ function Page() {
         <section
           className={`min-h-screen w-full flex flex-col items-center justify-center snap-start`}
           key={0}
-          id="hero"
+          id="home"
         >
           <section className="relative items-center">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -301,7 +302,16 @@ function Page() {
                   <p className="mt-3 text-base sm:mt-5 sm:text-xl">
                     {info.basic.occupation}
                   </p>
-                  {/* <p className="mt-2 text-base sm:text-lg">{slogan}</p> */}
+                  <p className="mt-2 text-base sm:text-lg">
+                    <Link
+                      target="_blank"
+                      href="https://github.com/kellymahlangu"
+                      className="hover:text-primary"
+                    >
+                      <FaGithub className="h-5 w-5" />
+                      <span className="sr-only">GitHub</span>
+                    </Link>
+                  </p>
                   <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-4">
                     <Link href="#contact">
                       <Button variant="default">Contac Me</Button>
@@ -421,7 +431,7 @@ function Page() {
         <section
           className={`min-h-screen w-full flex flex-col items-center justify-center snap-start`}
           key={2}
-          id="about"
+          id="projects"
         >
           <div className="container mx-auto px-4 py-8">
             <h2 className="text-3xl font-bold mb-6">Projects</h2>
@@ -536,10 +546,11 @@ function Page() {
             </div>
           </section>
         )}
+        {/* Contact */}
         <section
           className={`min-h-screen w-full flex flex-col items-center justify-center snap-start`}
           key={2}
-          id="about"
+          id="contact"
         >
           <Contact />
           <Footer />
