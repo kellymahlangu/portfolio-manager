@@ -225,6 +225,7 @@ function isMainRes(value: any): value is MainRes {
 }
 
 function Page() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [info, setInfo] = useState<MainRes>({
     basic: {
       name: "",
@@ -245,7 +246,7 @@ function Page() {
     projects: [],
     experiences: [],
   });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   useEffect(() => {
     const getData = async () => {
       setIsLoading(true);

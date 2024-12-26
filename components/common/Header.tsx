@@ -6,6 +6,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
 // import { ReactComponent as FullLogo} from './../../public/logo-full.svg';
 import { useTheme } from "next-themes";
+import Image from "next/image";
 
 type headerInfo = {
   title: string;
@@ -35,9 +36,12 @@ export function Header({ hasExp }: headerInfo) {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="#home" className="flex items-center">
-              <img
+              <Image
+                width={100}
+                height={20}
                 src={logoLink}
-                className="h-64 w-64"
+                // className="h-15 w-15"
+                alt={""}
               />
             </Link>
           </div>

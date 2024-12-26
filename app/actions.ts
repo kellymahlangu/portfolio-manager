@@ -410,3 +410,109 @@ function isDeviconEntry(entry: any): entry is DeviconEntry {
     )
   );
 }
+
+// not in use
+export async function extractMetadataForAI() {
+  try {
+    // Fetch basic portfolio information
+    const basicInfo = await prisma.basic.findUnique({ where: { id: "USER" } });
+
+    // Fetch about information
+    const aboutInfo = await prisma.about.findUnique({ where: { id: "USER" } });
+
+    // Fetch about questions
+    const aboutQuestions = await prisma.aboutQuestions.findUnique({
+      where: { id: "USER" },
+    });
+
+    // Fetch skills
+    const skills = await prisma.skill.findMany({
+      include: {
+        details: true,
+      },
+    });
+
+    // Fetch projects
+    const projects = await prisma.project.findMany({
+      include: {
+        stack: {
+          include: {
+            details: true,
+          },
+        },
+      },
+    });
+
+    // Fetch experience
+    const experiences = await prisma.experience.findMany({
+      include: {
+        skills: {
+          include: {
+            details: true,
+          },
+        },
+      },
+    });
+
+    // Construct the metadata prompt
+    const prompt = `
+Generate Portfolio Metadata For SEO in Nextjs:
+
+Basic Information:
+- Title: ${basicInfo?.title}
+- Name: ${basicInfo?.name} ${basicInfo?.surname}
+- Occupation: ${basicInfo?.occupation}
+- Tagline: ${basicInfo?.tagline}
+- Summary Video: ${basicInfo?.summeryVid || "N/A"}
+
+About Section:
+- Image: ${aboutInfo?.img || "N/A"}
+- Paragraph: ${aboutInfo?.paragraph}
+- CV: ${aboutInfo?.cv}
+
+About Questions:
+- Specialization: ${aboutQuestions?.specialization}
+- Excitement: ${aboutQuestions?.excitement}
+- Years of Experience: ${aboutQuestions?.yearsOfExperience}
+- Problems Solved: ${aboutQuestions?.problemsSolved}
+- Motivation: ${aboutQuestions?.motivation}
+- Interests: ${aboutQuestions?.interests}
+
+Skills:
+${skills
+  .map(
+    (skill) =>
+      `- ${skill.details.name} (${skill.category}) - Level: ${skill.level}`
+  )
+  .join("\n")}
+
+Projects:
+${projects
+  .map(
+    (project) => `- ${project.name}: ${project.description}
+  Stack: ${project.stack.map((s) => s.details.name).join(", ")}
+  Live URL: ${project.liveUrl}
+  Repo URL: ${project.repoUrl || "N/A"}`
+  )
+  .join("\n\n")}
+
+Experience:
+${experiences
+  .map(
+    (experience) => `- ${experience.company} (${experience.role}):
+  From: ${experience.start.toDateString()} To: ${
+      experience.end ? experience.end.toDateString() : "Present"
+    }
+  Summary: ${experience.summary}
+  Achievements: ${experience.achievements.join(", ")}`
+  )
+  .join("\n\n")}
+`;
+
+    console.log("Generated Prompt:\n", prompt);
+  } catch (error) {
+    console.error("Error extracting metadata:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
