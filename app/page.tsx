@@ -290,20 +290,23 @@ function Page() {
           key={0}
           id="home"
         >
-          <section className="relative items-center">
+          <section className="relative flex-grow flex items-center">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="lg:flex lg:items-center lg:justify-between">
-                <div className="relative z-10 lg:w-1/2 xl:w-2/5">
-                  <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-                    <span className="block">Hi, {"I'm"}</span>
+              <div className="flex items-center justify-center">
+                <div className="relative z-10 w-full">
+                  <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-foreground">
+                    <span className="block">Hi, I&apos;m</span>
                     <span className="block mt-1">
-                      {info.basic.name} {info.basic.surname}
+                      {info.basic.name.charAt(0).toUpperCase() +
+                        info.basic.name.slice(1)}{" "}
+                      {info.basic.surname.charAt(0).toUpperCase() +
+                        info.basic.surname.slice(1)}
                     </span>
                   </h1>
-                  <p className="mt-3 text-base sm:mt-5 sm:text-xl">
-                    {info.basic.occupation}
+                  <p className="mt-3 text-base sm:mt-5 sm:text-xl lg:text-foreground">
+                    A {info.basic.occupation}
                   </p>
-                  <p className="mt-2 text-base sm:text-lg">
+                  <p className="mt-2 text-base sm:text-lg lg:text-foreground">
                     <Link
                       target="_blank"
                       href="https://github.com/kellymahlangu"
@@ -314,11 +317,17 @@ function Page() {
                     </Link>
                   </p>
                   <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-4">
-                    <Link href="#contact">
-                      <Button variant="default">Contac Me</Button>
+                    <Link
+                      href="#projects"
+                      className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-background bg-primary hover:bg-primary-dark"
+                    >
+                      View My Work
                     </Link>
-                    <Link href="#projects">
-                      <Button variant="secondary">View my Projects</Button>
+                    <Link
+                      href="#contact"
+                      className="inline-flex items-center justify-center px-5 py-3 border border-primary text-base font-medium rounded-md text-primary bg-background hover:bg-muted"
+                    >
+                      Contact Me
                     </Link>
                   </div>
                 </div>

@@ -76,18 +76,6 @@ export default async function HeroSection({
 
   return (
     <section className="relative flex-grow flex items-center">
-      {/* Background image for small screens */}
-      <div className="absolute inset-0 lg:hidden">
-        <Image
-          src="/placeholder.svg?height=1080&width=1920"
-          alt="Background"
-          layout="fill"
-          objectFit="cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-foreground/50" />
-      </div>
-
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-center">
           <div className="relative z-10 w-full">
